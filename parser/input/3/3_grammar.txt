@@ -1,0 +1,5 @@
+terminal: *, =, id
+nonterminal: S, L, R
+S->L=R|R
+L->*R|id
+R->L

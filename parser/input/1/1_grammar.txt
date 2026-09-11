@@ -1,0 +1,4 @@
+terminal: a, b, c
+nonterminal: S, B
+S->aBc
+B->bB|a

@@ -1,0 +1,9 @@
+aac
+abac
+abbac
+ac
+abc
+bbac
+abca
+abbbc
+abbbbac
