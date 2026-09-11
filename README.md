@@ -28,7 +28,7 @@
 ## Core Algorithms
 
 ### 1. 嚴謹的詞法拆解 (Tokenization)
-* `tokenize_rhs`: 在處理 Production 右側字串時，系統採用**「依長度排序、長符號優先匹配」**的貪婪策略。這能有效避免如將識別字 `"id"` 誤拆分為 `"i"` 與 `"d"` 的邊界錯誤，確保長符號的完整性。
+* `tokenize_rhs`: 在處理 Production 右側字串時，系統採用**依長度排序、長符號優先匹配**的貪婪策略。這能有效避免如將識別字 `"id"` 誤拆分為 `"i"` 與 `"d"` 的邊界錯誤，確保長符號的完整性。
 
 ### 2. $FIRST$ 集合與 $\epsilon$ (Epsilon) 處理
 * `compute_first_sets`: 利用迭代法持續更新 $FIRST$ 集合直到收斂。特別針對 $\epsilon$ 進行處理：若 Production Body 內所有符號皆能推導出 $\epsilon$，則將 $\epsilon$ 加入該 Head 的 $FIRST$ 集合中。
