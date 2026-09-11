@@ -6,6 +6,7 @@
 
 ## Introduction
 本專案為編譯器前端 (Compiler Front-end) 之核心實作。系統能動態讀取 Context-Free Grammar (CFG)，自動推導並建構 LR(1) 狀態機 (State Machine)，最終生成具備 Lookahead 能力的 Parsing Table (Action & Goto 表)。
+
 系統能利用生成的分析表，精準模擬編譯器底層的 Shift 與 Reduce 堆疊操作，判斷輸入之測資字串是否符合定義之語法規範。
 
 [完整題目](./1141_compiler.pdf)
@@ -24,6 +25,7 @@ result: Valid!
 | 0A2b7    | $     | r3     |
 | 0A2A5    | $     | r1     |
 | 0S1      | $     | Acc    |
+```
 
 ## Algorithm Pipeline
 系統開發邏輯嚴格遵循編譯器設計理論，主要分為三個模組：
