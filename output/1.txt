@@ -1,0 +1,210 @@
+["S'->.S", 'S->AA', 'A->aA', 'A->b']
+//////////////////// state ////////////////////
+0 : [["S'->.S", ['$']], ['S->.AA', ['$']], ['A->.aA', ['a', 'b']], ['A->.b', ['a', 'b']]]
+1 : [["S'->S.", ['$']]]
+2 : [['S->A.A', ['$']], ['A->.aA', ['$']], ['A->.b', ['$']]]
+3 : [['A->a.A', ['a', 'b']], ['A->.aA', ['a', 'b']], ['A->.b', ['a', 'b']]]
+4 : [['A->b.', ['a', 'b']]]
+5 : [['S->AA.', ['$']]]
+6 : [['A->a.A', ['$']], ['A->.aA', ['$']], ['A->.b', ['$']]]
+7 : [['A->b.', ['$']]]
+8 : [['A->aA.', ['a', 'b']]]
+9 : [['A->aA.', ['$']]]
+//////////////////// parsing table ////////////////////
++---+-----+----+----+---+---+
+|   |  $  | a  | b  | S | A |
++---+-----+----+----+---+---+
+| 0 |     | s3 | s4 | 1 | 2 |
+| 1 | Acc |    |    |   |   |
+| 2 |     | s6 | s7 |   | 5 |
+| 3 |     | s3 | s4 |   | 8 |
+| 4 |     | r3 | r3 |   |   |
+| 5 |  r1 |    |    |   |   |
+| 6 |     | s6 | s7 |   | 9 |
+| 7 |  r3 |    |    |   |   |
+| 8 |     | r2 | r2 |   |   |
+| 9 |  r2 |    |    |   |   |
++---+-----+----+----+---+---+
+//////////////////// parsing ////////////////////
+parsing: bb
+result: Valid!
++-------+-------+--------+
+| stack | input | action |
++-------+-------+--------+
+| 0     |    bb |   s4   |
+| 0b4   |    b$ |   r3   |
+| 0A2   |    b$ |   s7   |
+| 0A2b7 |     $ |   r3   |
+| 0A2A5 |     $ |   r1   |
+| 0S1   |     $ |  Acc   |
++-------+-------+--------+
+parsing: ab
+result: Invalid!
++-------+-------+--------+
+| stack | input | action |
++-------+-------+--------+
+| 0     |    ab |   s3   |
+| 0a3   |    b$ |   s4   |
+| 0a3b4 |     $ |   X    |
++-------+-------+--------+
+parsing: abab
+result: Valid!
++---------+-------+--------+
+| stack   | input | action |
++---------+-------+--------+
+| 0       |  abab |   s3   |
+| 0a3     |  bab$ |   s4   |
+| 0a3b4   |   ab$ |   r3   |
+| 0a3A8   |   ab$ |   r2   |
+| 0A2     |   ab$ |   s6   |
+| 0A2a6   |    b$ |   s7   |
+| 0A2a6b7 |     $ |   r3   |
+| 0A2a6A9 |     $ |   r2   |
+| 0A2A5   |     $ |   r1   |
+| 0S1     |     $ |  Acc   |
++---------+-------+--------+
+parsing: aaaaaabb
+result: Valid!
++-----------------+----------+--------+
+| stack           |    input | action |
++-----------------+----------+--------+
+| 0               | aaaaaabb |   s3   |
+| 0a3             | aaaaabb$ |   s3   |
+| 0a3a3           |  aaaabb$ |   s3   |
+| 0a3a3a3         |   aaabb$ |   s3   |
+| 0a3a3a3a3       |    aabb$ |   s3   |
+| 0a3a3a3a3a3     |     abb$ |   s3   |
+| 0a3a3a3a3a3a3   |      bb$ |   s4   |
+| 0a3a3a3a3a3a3b4 |       b$ |   r3   |
+| 0a3a3a3a3a3a3A8 |       b$ |   r2   |
+| 0a3a3a3a3a3A8   |       b$ |   r2   |
+| 0a3a3a3a3A8     |       b$ |   r2   |
+| 0a3a3a3A8       |       b$ |   r2   |
+| 0a3a3A8         |       b$ |   r2   |
+| 0a3A8           |       b$ |   r2   |
+| 0A2             |       b$ |   s7   |
+| 0A2b7           |        $ |   r3   |
+| 0A2A5           |        $ |   r1   |
+| 0S1             |        $ |  Acc   |
++-----------------+----------+--------+
+parsing: abaaab
+result: Valid!
++-------------+--------+--------+
+| stack       |  input | action |
++-------------+--------+--------+
+| 0           | abaaab |   s3   |
+| 0a3         | baaab$ |   s4   |
+| 0a3b4       |  aaab$ |   r3   |
+| 0a3A8       |  aaab$ |   r2   |
+| 0A2         |  aaab$ |   s6   |
+| 0A2a6       |   aab$ |   s6   |
+| 0A2a6a6     |    ab$ |   s6   |
+| 0A2a6a6a6   |     b$ |   s7   |
+| 0A2a6a6a6b7 |      $ |   r3   |
+| 0A2a6a6a6A9 |      $ |   r2   |
+| 0A2a6a6A9   |      $ |   r2   |
+| 0A2a6A9     |      $ |   r2   |
+| 0A2A5       |      $ |   r1   |
+| 0S1         |      $ |  Acc   |
++-------------+--------+--------+
+parsing: abbbbbb
+result: Invalid!
++-------+---------+--------+
+| stack |   input | action |
++-------+---------+--------+
+| 0     | abbbbbb |   s3   |
+| 0a3   | bbbbbb$ |   s4   |
+| 0a3b4 |  bbbbb$ |   r3   |
+| 0a3A8 |  bbbbb$ |   r2   |
+| 0A2   |  bbbbb$ |   s7   |
+| 0A2b7 |   bbbb$ |   X    |
++-------+---------+--------+
+parsing: abbababab
+result: Invalid!
++-------+-----------+--------+
+| stack |     input | action |
++-------+-----------+--------+
+| 0     | abbababab |   s3   |
+| 0a3   | bbababab$ |   s4   |
+| 0a3b4 |  bababab$ |   r3   |
+| 0a3A8 |  bababab$ |   r2   |
+| 0A2   |  bababab$ |   s7   |
+| 0A2b7 |   ababab$ |   X    |
++-------+-----------+--------+
+parsing: abaaab
+result: Valid!
++-------------+--------+--------+
+| stack       |  input | action |
++-------------+--------+--------+
+| 0           | abaaab |   s3   |
+| 0a3         | baaab$ |   s4   |
+| 0a3b4       |  aaab$ |   r3   |
+| 0a3A8       |  aaab$ |   r2   |
+| 0A2         |  aaab$ |   s6   |
+| 0A2a6       |   aab$ |   s6   |
+| 0A2a6a6     |    ab$ |   s6   |
+| 0A2a6a6a6   |     b$ |   s7   |
+| 0A2a6a6a6b7 |      $ |   r3   |
+| 0A2a6a6a6A9 |      $ |   r2   |
+| 0A2a6a6A9   |      $ |   r2   |
+| 0A2a6A9     |      $ |   r2   |
+| 0A2A5       |      $ |   r1   |
+| 0S1         |      $ |  Acc   |
++-------------+--------+--------+
+parsing: abb
+result: Valid!
++-------+-------+--------+
+| stack | input | action |
++-------+-------+--------+
+| 0     |   abb |   s3   |
+| 0a3   |   bb$ |   s4   |
+| 0a3b4 |    b$ |   r3   |
+| 0a3A8 |    b$ |   r2   |
+| 0A2   |    b$ |   s7   |
+| 0A2b7 |     $ |   r3   |
+| 0A2A5 |     $ |   r1   |
+| 0S1   |     $ |  Acc   |
++-------+-------+--------+
+parsing: abaaaaaaaaaaaaab
+result: Valid!
++---------------------------------+------------------+--------+
+| stack                           |            input | action |
++---------------------------------+------------------+--------+
+| 0                               | abaaaaaaaaaaaaab |   s3   |
+| 0a3                             | baaaaaaaaaaaaab$ |   s4   |
+| 0a3b4                           |  aaaaaaaaaaaaab$ |   r3   |
+| 0a3A8                           |  aaaaaaaaaaaaab$ |   r2   |
+| 0A2                             |  aaaaaaaaaaaaab$ |   s6   |
+| 0A2a6                           |   aaaaaaaaaaaab$ |   s6   |
+| 0A2a6a6                         |    aaaaaaaaaaab$ |   s6   |
+| 0A2a6a6a6                       |     aaaaaaaaaab$ |   s6   |
+| 0A2a6a6a6a6                     |      aaaaaaaaab$ |   s6   |
+| 0A2a6a6a6a6a6                   |       aaaaaaaab$ |   s6   |
+| 0A2a6a6a6a6a6a6                 |        aaaaaaab$ |   s6   |
+| 0A2a6a6a6a6a6a6a6               |         aaaaaab$ |   s6   |
+| 0A2a6a6a6a6a6a6a6a6             |          aaaaab$ |   s6   |
+| 0A2a6a6a6a6a6a6a6a6a6           |           aaaab$ |   s6   |
+| 0A2a6a6a6a6a6a6a6a6a6a6         |            aaab$ |   s6   |
+| 0A2a6a6a6a6a6a6a6a6a6a6a6       |             aab$ |   s6   |
+| 0A2a6a6a6a6a6a6a6a6a6a6a6a6     |              ab$ |   s6   |
+| 0A2a6a6a6a6a6a6a6a6a6a6a6a6a6   |               b$ |   s7   |
+| 0A2a6a6a6a6a6a6a6a6a6a6a6a6a6b7 |                $ |   r3   |
+| 0A2a6a6a6a6a6a6a6a6a6a6a6a6a6A9 |                $ |   r2   |
+| 0A2a6a6a6a6a6a6a6a6a6a6a6a6A9   |                $ |   r2   |
+| 0A2a6a6a6a6a6a6a6a6a6a6a6A9     |                $ |   r2   |
+| 0A2a6a6a6a6a6a6a6a6a6a6A9       |                $ |   r2   |
+| 0A2a6a6a6a6a6a6a6a6a6A9         |                $ |   r2   |
+| 0A2a6a6a6a6a6a6a6a6A9           |                $ |   r2   |
+| 0A2a6a6a6a6a6a6a6A9             |                $ |   r2   |
+| 0A2a6a6a6a6a6a6A9               |                $ |   r2   |
+| 0A2a6a6a6a6a6A9                 |                $ |   r2   |
+| 0A2a6a6a6a6A9                   |                $ |   r2   |
+| 0A2a6a6a6A9                     |                $ |   r2   |
+| 0A2a6a6A9                       |                $ |   r2   |
+| 0A2a6A9                         |                $ |   r2   |
+| 0A2A5                           |                $ |   r1   |
+| 0S1                             |                $ |  Acc   |
++---------------------------------+------------------+--------+
+parsing: aca
+Invalid character exist!
+result: Invalid!
